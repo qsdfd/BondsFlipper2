@@ -24,7 +24,6 @@ public class Main extends Script {
 	
 	private String status;
 	
-	
 	@Override
     public void onStart(){
 		resetTime();
