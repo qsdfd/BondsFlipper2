@@ -6,22 +6,23 @@ import org.osbot.rs07.script.ScriptManifest;
 //Change the name variable to whatever you want to be displayed when its executed
 @ScriptManifest(author = "Vilius", info = "", logo = "", name = "Breaker", version = 0)
 public class Breaker extends RandomSolver {
+	
+	private Utils utils;
+
 	public Breaker() {
 		super(RandomEvent.BREAK_MANAGER);
+		this.utils = new Utils();
 	}
 
 	@Override
 	public boolean shouldActivate() {
-		//Condition for the break manager to be activated
-		log("checking");
-		return false;
+		Main.status = "checking if to break";
+		return true;
 	}
 
 	@Override
 	public int onLoop() throws InterruptedException {
-		//Code which should be executed while the break manager is activated
-		//example
-		log("hi");
+		utils.logOut();
 		return 0;
 	}
 

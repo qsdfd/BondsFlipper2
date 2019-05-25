@@ -22,7 +22,7 @@ public class Main extends Script {
 	private long timeLoggedIn;
 	private long timeOffline;
 	
-	private String status;
+	public static String status;
 	
 	@Override
     public void onStart(){
