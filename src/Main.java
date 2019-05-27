@@ -24,6 +24,8 @@ public class Main extends Script {
 	
 	public static String status;
 	
+	public static boolean shouldBreak;
+	
 	@Override
     public void onStart(){
 		resetTime();
@@ -71,6 +73,10 @@ public class Main extends Script {
 		g.drawString("Runtime: " + ft(this.timeRan), x, getY(startY, value+=increment));
 		g.drawString("Time logged in: " + ft(this.timeLoggedIn), x, getY(startY, value+=increment));
 		g.drawString("Status: " + status, x, getY(startY, value+=increment));
+		if(!SummaryClient.status.equals("ok")){
+			value+=increment;
+			g.drawString("Status client: " + SummaryClient.status, x, getY(startY, value+=increment));
+		}
     }
     
     public void onMessage(Message message) throws InterruptedException {
