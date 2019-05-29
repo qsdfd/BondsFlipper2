@@ -1,12 +1,12 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.util.concurrent.TimeUnit;
+
 import org.osbot.rs07.api.ui.Message;
-import org.osbot.rs07.script.RandomEvent;
 import org.osbot.rs07.script.Script;
 import org.osbot.rs07.script.ScriptManifest;
-
-import java.util.concurrent.TimeUnit;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 @ScriptManifest(name = "BondsFlipper", author = "dokato", version = 1.0, info = "", logo = "") 
 public class Main extends Script {
@@ -37,7 +37,6 @@ public class Main extends Script {
 	
     public int onLoop() throws InterruptedException{
     	status="loop started";
-    	http
     	return 0;
     }
 

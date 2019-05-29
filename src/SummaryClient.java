@@ -1,11 +1,4 @@
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URL;
-import java.nio.file.Paths;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

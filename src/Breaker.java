@@ -1,5 +1,3 @@
-import java.util.concurrent.TimeUnit;
-
 import org.osbot.rs07.script.RandomEvent;
 import org.osbot.rs07.script.RandomSolver;
 import org.osbot.rs07.script.ScriptManifest;
