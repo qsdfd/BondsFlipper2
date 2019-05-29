@@ -5,29 +5,25 @@ import org.osbot.rs07.script.ScriptManifest;
 @ScriptManifest(author = "", info = "", logo = "", name = "Breaker", version = 0)
 public class Breaker extends RandomSolver {
 	
-	public SummaryClient sc;
+	private SummaryClient sc;
 	
 	public boolean shouldBreak;
 	public long breakUntil;
 	
 	public String status;
 
-	public Breaker() {
+	public Breaker(SummaryClient sc) {
 		super(RandomEvent.BREAK_MANAGER);
-		sc = new SummaryClient();
+		this.sc = sc;
 		refreshInterval();
 	}
 
 	@Override
 	public boolean shouldActivate() {
-		status = "checking if need to break";
-
+		status = "Breaker loop started";
 		if (timeToUpdate()) {
 			refreshInterval();
 		}
-
-		log(sc.state);
-
 		return !sc.shouldBot || !sc.isOk || shouldBreak;
 	}
 
@@ -65,13 +61,8 @@ public class Breaker extends RandomSolver {
 				logoutTab.logOut();
 			}
 			status = "sleeping afer check clause";
-			sleep(random(0, 2000));
+			sleep(random(0, 10000));
 		}
 		status = "break loop ended";
 	}
-
-	public static void main(String[] args) {
-
-	}
-
 }

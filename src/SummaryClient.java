@@ -9,9 +9,9 @@ public class SummaryClient {
 	public Boolean shouldBot;
 	public Boolean fixed;
 	public Boolean isCalcReliable;
-	public Long convert;
-	public Long buy;
-	public Long sell;
+	public Integer convert;
+	public Integer buy;
+	public Integer sell;
 	public Integer breakMin;
 	public Integer breakMax;
 
@@ -34,14 +34,14 @@ public class SummaryClient {
 				breakMax = obj.getAsJsonObject("fixed").getAsJsonPrimitive("break_max").getAsInt();
 
 				isCalcReliable = obj.getAsJsonObject("calc").getAsJsonPrimitive("isCalcReliable").getAsBoolean();
-				convert = obj.getAsJsonPrimitive("convert").getAsLong();
+				convert = obj.getAsJsonPrimitive("convert").getAsInt();
 
 				if (fixed) {
-					buy = obj.getAsJsonObject("fixed").getAsJsonPrimitive("buy").getAsLong();
-					sell = obj.getAsJsonObject("fixed").getAsJsonPrimitive("sell").getAsLong();
+					buy = obj.getAsJsonObject("fixed").getAsJsonPrimitive("buy").getAsInt();
+					sell = obj.getAsJsonObject("fixed").getAsJsonPrimitive("sell").getAsInt();
 				} else if (isCalcReliable) {
-					buy = obj.getAsJsonObject("calc").getAsJsonObject("sug").getAsJsonPrimitive("buy").getAsLong();
-					sell = obj.getAsJsonObject("calc").getAsJsonObject("sug").getAsJsonPrimitive("sell").getAsLong();
+					buy = obj.getAsJsonObject("calc").getAsJsonObject("sug").getAsJsonPrimitive("buy").getAsInt();
+					sell = obj.getAsJsonObject("calc").getAsJsonObject("sug").getAsJsonPrimitive("sell").getAsInt();
 				} else {
 					throw new Exception("Err: Not fixed and calc not reliable");
 				}
@@ -64,15 +64,6 @@ public class SummaryClient {
 	public String updateState() {
 		return "\nshouldBot: " + shouldBot + "\n" + "isOk: " + isOk + "\n" + "fixed: " + fixed + "\n"
 				+ "isCalcReliable: " + isCalcReliable + "\n" + "convert: " + convert + "\n" + "buy: " + buy + "\n"
-				+ "sell: " + sell + "\n" + "breakMin: " + breakMin + "\n" + "breakMax: " + breakMax + "\n" + "status: "
-				+ status + "\n";
-	}
-
-	public static void main(String[] args) throws Exception {
-		SummaryClient sc = new SummaryClient();
-		sc.update();;
-
-		System.out.println(sc.state);
-
+				+ "sell: " + sell + "\n" + "breakMin: " + breakMin + "\n" + "breakMax: " + breakMax + "\n";
 	}
 }

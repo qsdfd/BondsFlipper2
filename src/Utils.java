@@ -40,8 +40,4 @@ public class Utils {
 				reader.close();
 		}
 	}
-
-	public static void main(String[] args) {
-		
-	}
 }
