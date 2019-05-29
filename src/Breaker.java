@@ -6,30 +6,32 @@ import org.osbot.rs07.script.ScriptManifest;
 
 @ScriptManifest(author = "", info = "", logo = "", name = "Breaker", version = 0)
 public class Breaker extends RandomSolver {
+	
+	public SummaryClient sc;
+	
+	public boolean shouldBreak;
+	public long breakUntil;
+	
+	public String status;
 
-	// tussen 5 en 25 mins random
-	
-	private long breakUntil;
-	
 	public Breaker() {
 		super(RandomEvent.BREAK_MANAGER);
+		sc = new SummaryClient();
 		refreshInterval();
 	}
 
-
 	@Override
 	public boolean shouldActivate() {
-		Main.status = "checking if need to break";
-		
-		if(timeToUpdate()) {
+		status = "checking if need to break";
+
+		if (timeToUpdate()) {
 			refreshInterval();
 		}
-		
-		log(SummaryClient.getState());
-		
-		return !SummaryClient.shouldBot || !SummaryClient.isOk || Main.shouldBreak;
-	}
 
+		log(sc.state);
+
+		return !sc.shouldBot || !sc.isOk || shouldBreak;
+	}
 
 	@Override
 	public int onLoop() throws InterruptedException {
@@ -37,33 +39,37 @@ public class Breaker extends RandomSolver {
 		return 0;
 	}
 	
+	public long getBreakAfterTime() {
+		return breakUntil - System.currentTimeMillis();
+	}
+
 	private boolean timeToUpdate() {
 		return System.currentTimeMillis() > breakUntil;
 	}
 
 	private void refreshInterval() {
-		SummaryClient.update();
-		breakUntil = System.currentTimeMillis() + generateRadomTimestampBetweenMinutes(10, 20);
+		sc.update();
+		status = "generating break time";
+		breakUntil = System.currentTimeMillis()
+				+ Utils.generateRadomTimestampBetweenMinutes(sc.breakMin, sc.breakMax);
+		shouldBreak = false;
 	}
 
-
-	
-	
 	private void logOut() throws InterruptedException {
-		Main.status = "break loop started";
+		status = "break loop started";
 		if (getClient().isLoggedIn()) {
-			Main.status = "checking if logout tab is open";
-			if(!logoutTab.isOpen()) {
-				Main.status = "opening logout tab";
+			status = "checking if logout tab is open";
+			if (!logoutTab.isOpen()) {
+				status = "opening logout tab";
 				logoutTab.open();
-			}else{
-				Main.status = "logging out";
+			} else {
+				status = "logging out";
 				logoutTab.logOut();
 			}
-			Main.status = "sleeping afer check clause";
+			status = "sleeping afer check clause";
 			sleep(random(0, 2000));
 		}
-		Main.status = "break loop ended";
+		status = "break loop ended";
 	}
 
 	public static void main(String[] args) {

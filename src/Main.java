@@ -22,22 +22,22 @@ public class Main extends Script {
 	private long timeLoggedIn;
 	private long timeOffline;
 	
-	public static String status;
+	private String status;
 	
-	public static boolean shouldBreak;
+	private Breaker breaker;
 	
 	@Override
     public void onStart(){
 		resetTime();
 		
-		Breaker breaker = new Breaker();
+		breaker = new Breaker();
 		breaker.exchangeContext(getBot());
 		bot.getRandomExecutor().overrideOSBotRandom(breaker);
     }
 	
     public int onLoop() throws InterruptedException{
     	status="loop started";
-    	
+    	http
     	return 0;
     }
 
@@ -73,10 +73,11 @@ public class Main extends Script {
 		g.drawString("Runtime: " + ft(this.timeRan), x, getY(startY, value+=increment));
 		g.drawString("Time logged in: " + ft(this.timeLoggedIn), x, getY(startY, value+=increment));
 		g.drawString("Status: " + status, x, getY(startY, value+=increment));
-		if(!SummaryClient.status.equals("ok")){
-			value+=increment;
-			g.drawString("Status client: " + SummaryClient.status, x, getY(startY, value+=increment));
-		}
+		value+=increment;
+		g.drawString("Status breaker: " + breaker.status, x, getY(startY, value+=increment));
+		g.drawString("Break for: " + ft(breaker.getBreakAfterTime()), x, getY(startY, value+=increment));
+		g.drawString("Status client: " + breaker.sc.status, x, getY(startY, value+=increment));
+		// log client state conditionally
     }
     
     public void onMessage(Message message) throws InterruptedException {
@@ -102,21 +103,25 @@ public class Main extends Script {
 	}
     
 	private String ft(long duration) {
-		String res = "";
-		long days = TimeUnit.MILLISECONDS.toDays(duration);
-		long hours = TimeUnit.MILLISECONDS.toHours(duration)
-				- TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration));
-		long minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
-				- TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS
-						.toHours(duration));
-		long seconds = TimeUnit.MILLISECONDS.toSeconds(duration)
-				- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
-						.toMinutes(duration));
-		if (days == 0L) {
-			res = hours + ":" + minutes + ":" + seconds;
-		} else {
-			res = days + ":" + hours + ":" + minutes + ":" + seconds;
+		String res = "---";
+		
+		if(duration > 0) {
+			long days = TimeUnit.MILLISECONDS.toDays(duration);
+			long hours = TimeUnit.MILLISECONDS.toHours(duration)
+					- TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration));
+			long minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
+					- TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS
+							.toHours(duration));
+			long seconds = TimeUnit.MILLISECONDS.toSeconds(duration)
+					- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
+							.toMinutes(duration));
+			if (days == 0L) {
+				res = hours + ":" + minutes + ":" + seconds;
+			} else {
+				res = days + ":" + hours + ":" + minutes + ":" + seconds;
+			}
 		}
+		
 		return res;
 	}
 }

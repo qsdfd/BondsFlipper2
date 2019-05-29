@@ -10,12 +10,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
-	// from minutes to millis and then randomize ...
+	
 	public static long generateRadomTimestampBetweenMinutes(int min, int max) {
-		long secondsToBreak = ThreadLocalRandom.current().nextLong(
-				TimeUnit.MINUTES.toSeconds(min),
-				TimeUnit.MINUTES.toSeconds(max));
-		return TimeUnit.SECONDS.toMillis(secondsToBreak);
+		return ThreadLocalRandom.current().nextLong(
+				TimeUnit.MINUTES.toMillis(min),
+				TimeUnit.MINUTES.toMillis(max)
+				);
 	}
 
 	public static String getStacktrace(Exception e) {
@@ -44,7 +44,6 @@ public class Utils {
 	}
 
 	public static void main(String[] args) {
-//		System.out.println(TimeUnit.SECONDS.toMillis(ThreadLocalRandom.current().nextInt((10 * 60), (20 * 60))));
-		System.out.println(generateRadomTimestampBetweenMinutes(0,6));
+		
 	}
 }

@@ -13,18 +13,22 @@ public class SummaryClient {
 
 	private static final String SUMMARY_URL = "http://localhost:3000/summary";
 
-	public static Boolean shouldBot;
-	public static Boolean fixed;
-	public static Boolean isCalcReliable;
-	public static Long convert;
-	public static Long buy;
-	public static Long sell;
+	public Boolean shouldBot;
+	public Boolean fixed;
+	public Boolean isCalcReliable;
+	public Long convert;
+	public Long buy;
+	public Long sell;
+	public Integer breakMin;
+	public Integer breakMax;
 
-	public static String status;
-	public static boolean isOk;
+	public String status;
+	public boolean isOk;
+	
+	public String state;
 
-	public static void update() {
-		status = "updating ...";
+	public void update() {
+		this.status = "updating ...";
 
 		try {
 			String response = Utils.readUrl(SUMMARY_URL);
@@ -33,6 +37,9 @@ public class SummaryClient {
 			shouldBot = obj.getAsJsonObject("fixed").getAsJsonPrimitive("bot").getAsBoolean();
 			if (shouldBot) {
 				fixed = obj.getAsJsonObject("fixed").getAsJsonPrimitive("fixed").getAsBoolean();
+				breakMin = obj.getAsJsonObject("fixed").getAsJsonPrimitive("break_min").getAsInt();
+				breakMax = obj.getAsJsonObject("fixed").getAsJsonPrimitive("break_max").getAsInt();
+
 				isCalcReliable = obj.getAsJsonObject("calc").getAsJsonPrimitive("isCalcReliable").getAsBoolean();
 				convert = obj.getAsJsonPrimitive("convert").getAsLong();
 
@@ -57,19 +64,22 @@ public class SummaryClient {
 			isOk = false;
 		}
 
+		state = updateState();
 		status = "done updating";
 	}
 
-	public static String getState() {
+	public String updateState() {
 		return "\nshouldBot: " + shouldBot + "\n" + "isOk: " + isOk + "\n" + "fixed: " + fixed + "\n"
 				+ "isCalcReliable: " + isCalcReliable + "\n" + "convert: " + convert + "\n" + "buy: " + buy + "\n"
-				+ "sell: " + sell + "\n" + "status: " + status + "\n";
+				+ "sell: " + sell + "\n" + "breakMin: " + breakMin + "\n" + "breakMax: " + breakMax + "\n" + "status: "
+				+ status + "\n";
 	}
 
 	public static void main(String[] args) throws Exception {
-		update();
+		SummaryClient sc = new SummaryClient();
+		sc.update();;
 
-		System.out.println(getState());
+		System.out.println(sc.state);
 
 	}
 }
