@@ -32,8 +32,8 @@ public class Main extends Script {
 
 	private static final int BOND = 13190;
 	private static final int BOND_UNTRADEBALE = 13192;
-	
-//	private int totalWorth;
+
+	private int cashInInv;
 
 	@Override
 	public void onStart() {
@@ -110,7 +110,9 @@ public class Main extends Script {
 		drawString(g, "Status breaker: " + breaker.status, x, getY(startY, value += increment));
 		drawString(g, "Break for: " + ft(breaker.getBreakAfterTime()), x, getY(startY, value += increment));
 		drawString(g, "Status client: " + sc.status, x, getY(startY, value += increment));
-
+		value += increment;
+		drawString(g, "Cash in inv: " + cashInInv, x, getY(startY, value += increment));
+		
 		drawString(g, sc.state, 560, 290);
 	}
 
@@ -122,7 +124,7 @@ public class Main extends Script {
 
 	@Override
 	public void onMessage(Message message) throws InterruptedException {
-		
+
 	}
 
 	@Override
@@ -243,11 +245,7 @@ public class Main extends Script {
 
 	private boolean isOpenBox() {
 		status = "Checking if any available box is open";
-		boolean anyBoxFree = hasAnyBoxStatus(Status.EMPTY);
-		if (!anyBoxFree) {
-			status = "All boxes are pending";
-		}
-		return anyBoxFree;
+		return hasAnyBoxStatus(Status.EMPTY);
 	}
 
 	private void sell() throws InterruptedException {
@@ -270,12 +268,7 @@ public class Main extends Script {
 	private boolean hasEnoughMoney() {
 		status = "Checking if has enough money to buy more";
 		int minimalCashNeeded = (getAmountOfPendingBuys() * sc.convert) + (sc.buy + sc.convert);
-		boolean hasEnough = getInventory().contains("Coins")
-				&& getInventory().getItem("Coins").getAmount() > minimalCashNeeded;
-		if (!hasEnough) {
-			status = "Not enough cash";
-		}
-		return hasEnough;
+		return getInventory().contains("Coins") && getInventory().getItem("Coins").getAmount() > minimalCashNeeded;
 	}
 
 	private int getAmountOfPendingBuys() {
@@ -285,7 +278,6 @@ public class Main extends Script {
 		for (Box box : boxes)
 			if (getGrandExchange().getStatus(box).equals(Status.PENDING_BUY))
 				amount++;
-
 		return amount;
 	}
 
@@ -296,7 +288,6 @@ public class Main extends Script {
 	}
 
 	private void abortBoxPricesIfNeeded() throws InterruptedException {
-
 		status = "getting perticular box that needs abort";
 
 		if ((getGrandExchange().getStatus(Box.BOX_1).equals(Status.PENDING_BUY)
@@ -355,8 +346,11 @@ public class Main extends Script {
 		rs2Widget.interact("Abort offer");
 		sleep(random(1890, 2941));
 	}
-	
+
 	private void calcProfits() {
-		
+		status = "getting cash in inv";
+		if (getInventory().contains("Coins")) {
+			cashInInv = getInventory().getItem("Coins").getAmount();
+		}
 	}
 }
